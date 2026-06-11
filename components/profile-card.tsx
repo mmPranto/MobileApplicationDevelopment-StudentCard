@@ -1,4 +1,5 @@
-import { View, Text, StyleSheet } from "react-native";
+import { useState } from "react";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
 interface ProfileCardProps {
     name: string;
@@ -12,6 +13,13 @@ export default function ProfileCard({name,studentId,department,bio }:ProfileCard
         .split(" ")
         .map((word) => word[0])
         .join("");
+    
+    const [followed, setFollowed] = useState(false);
+    
+    const handleFollow = () => {
+        setFollowed(!followed);  
+    };
+
     return (
         <View style={styles.card}>
             <View style={styles.avatar}>
@@ -21,19 +29,20 @@ export default function ProfileCard({name,studentId,department,bio }:ProfileCard
             <Text style={styles.idBadge}>ID: {studentId}</Text>
             <Text style={styles.role}>{department}</Text>
             <View style={styles.divider} />
-            <Text style={ styles.bio}>{ bio}</Text>
+            <Text style={styles.bio}>{bio}</Text>
+            <TouchableOpacity
+                style={[styles.button, followed && styles.buttonFollowed]}
+                onPress={handleFollow}
+            >
+                <Text style={[styles.buttonText, followed && styles.buttonTextFollowed]}>
+                    {followed? 'Following ✓':'Follow'}
+                </Text>
+            </TouchableOpacity>
         </View>
     );
     
 }
 const styles = StyleSheet.create({
-//   screen: {
-//     flex: 1,
-//     backgroundColor: "#F0F4F8",
-//     alignItems: "center",
-//     paddingTop: 60,
-//     paddingBottom:40,
-//   },
   card: {
     backgroundColor: "#FFFFFF",
     borderRadius: 16,
@@ -92,5 +101,26 @@ const styles = StyleSheet.create({
     color: "#64748B",
     textAlign: "center",
     lineHeight:22,
-  }
+    },
+    button: {
+        marginTop: 20,
+        paddingVertical: 10,
+        paddingHorizontal: 32,
+        borderRadius: 24,
+        borderWidth: 2,
+        borderColor: "#0D9488'",
+        backgroundColor:"transparent",
+    },
+    buttonFollowed: {
+        backgroundColor: "#0D9488'",
+        
+    },
+    buttonText: {
+        fontSize: 14,
+        fontWeight: "600",
+        color:"#0D9488'",
+    },
+    buttonTextFollowed: {
+        color:"#d61414",
+    }
 });
