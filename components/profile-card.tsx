@@ -2,45 +2,60 @@ import { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
 interface ProfileCardProps {
-    name: string;
-    studentId: string;
-    department: string;
-    bio: string;
+  name: string;
+  studentId: string;
+  department: string;
+  bio: string;
+  skills?: string[];
 }
 
-export default function ProfileCard({name,studentId,department,bio }:ProfileCardProps) {
-    const initials = name
-        .split(" ")
-        .map((word) => word[0])
-        .join("");
-    
-    const [followed, setFollowed] = useState(false);
-    
-    const handleFollow = () => {
-        setFollowed(!followed);  
-    };
+export default function ProfileCard({
+  name,
+  studentId,
+  department,
+  bio,
+  skills,
+}: ProfileCardProps) {
+  const initials = name
+    .split(" ")
+    .map((word) => word[0])
+    .join("");
 
-    return (
-        <View style={styles.card}>
-            <View style={styles.avatar}>
-                <Text style={styles.avatarText}>{ initials}</Text>
-            </View>
-            <Text style={styles.name}>{name}</Text>
-            <Text style={styles.idBadge}>ID: {studentId}</Text>
-            <Text style={styles.role}>{department}</Text>
-            <View style={styles.divider} />
-            <Text style={styles.bio}>{bio}</Text>
-            <TouchableOpacity
-                style={[styles.button, followed && styles.buttonFollowed]}
-                onPress={handleFollow}
-            >
-                <Text style={[styles.buttonText, followed && styles.buttonTextFollowed]}>
-                    {followed? 'Following ✓':'Follow'}
-                </Text>
-            </TouchableOpacity>
-        </View>
-    );
-    
+  const [followed, setFollowed] = useState(false);
+
+  const handleFollow = () => {
+    setFollowed(!followed);
+  };
+
+  return (
+    <View style={styles.card}>
+      <View style={styles.avatar}>
+        <Text style={styles.avatarText}>{initials}</Text>
+      </View>
+      <Text style={styles.name}>{name}</Text>
+      <Text style={styles.idBadge}>ID: {studentId}</Text>
+      <Text style={styles.role}>{department}</Text>
+      <View style={styles.divider} />
+      <Text style={styles.bio}>{bio}</Text>
+      <View style={styles.skillsContainer}>
+        {skills?.map((skill, index) => (
+          <View key={index} style={styles.skillBadge}>
+            <Text style={styles.skillText}>{skill}</Text>
+          </View>
+        ))}
+      </View>
+      <TouchableOpacity
+        style={[styles.button, followed && styles.buttonFollowed]}
+        onPress={handleFollow}
+      >
+        <Text
+          style={[styles.buttonText, followed && styles.buttonTextFollowed]}
+        >
+          {followed ? "Following ✓" : "Follow"}
+        </Text>
+      </TouchableOpacity>
+    </View>
+  );
 }
 const styles = StyleSheet.create({
   card: {
@@ -53,7 +68,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.08,
     shadowRadius: 8,
-    elevation:4,
+    elevation: 4,
   },
   avatar: {
     width: 88,
@@ -62,65 +77,85 @@ const styles = StyleSheet.create({
     backgroundColor: "#0D9488",
     alignItems: "center",
     justifyContent: "center",
-    marginBottom:16,
+    marginBottom: 16,
   },
   avatarText: {
     color: "#FFFFFF",
     fontSize: 28,
-    fontWeight:"bold",
+    fontWeight: "bold",
   },
   name: {
     fontSize: 20,
     fontWeight: "bold",
     color: "#0D1F4E",
-    marginBottom:4,
-    },
-    idBadge: {
-        fontSize: 12,
-        color: "#0D9488",
-        backgroundColor: "#E1F5EE",
-        paddingHorizontal: 10,
-        paddingVertical: 3,
-        borderRadius: 20,
-        marginBottom: 4,
-        overflow: "hidden",
+    marginBottom: 4,
+  },
+  idBadge: {
+    fontSize: 12,
+    color: "#0D9488",
+    backgroundColor: "#E1F5EE",
+    paddingHorizontal: 10,
+    paddingVertical: 3,
+    borderRadius: 20,
+    marginBottom: 4,
+    overflow: "hidden",
   },
   role: {
     fontSize: 14,
     color: "#64748B",
-    marginBottom:16,
+    marginBottom: 16,
   },
   divider: {
     width: "100%",
     height: 1,
     backgroundColor: "#E2E8F0",
-    marginBottom:16,
+    marginBottom: 16,
   },
   bio: {
     fontSize: 14,
     color: "#64748B",
     textAlign: "center",
-    lineHeight:22,
-    },
-    button: {
-        marginTop: 20,
-        paddingVertical: 10,
-        paddingHorizontal: 32,
-        borderRadius: 24,
-        borderWidth: 2,
-        borderColor: "#0D9488'",
-        backgroundColor:"transparent",
-    },
-    buttonFollowed: {
-        backgroundColor: "#0D9488'",
-        
-    },
-    buttonText: {
-        fontSize: 14,
-        fontWeight: "600",
-        color:"#0D9488'",
-    },
-    buttonTextFollowed: {
-        color:"#d61414",
-    }
+    lineHeight: 22,
+  },
+  button: {
+    marginTop: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 32,
+    borderRadius: 24,
+    borderWidth: 2,
+    borderColor: "#0D9488'",
+    backgroundColor: "transparent",
+  },
+  buttonFollowed: {
+    backgroundColor: "#0D9488'",
+  },
+  buttonText: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#0D9488'",
+  },
+  buttonTextFollowed: {
+    color: "#d61414",
+  },
+  skillsContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    marginTop: 12,
+    gap: 8,
+  },
+  skillBadge: {
+    backgroundColor: "#EFF6FF",
+    borderRadius: 20,
+    paddingHorizontal: 12,
+    paddingVertical: 5,
+    borderWidth: 1,
+    borderColor: "#BFDBFE",
+  },
+
+  skillText: {
+    fontSize: 12,
+    color: "#1D4ED8",
+    fontWeight: "500",
+  },
 });
